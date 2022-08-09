@@ -13,7 +13,7 @@ class Command(BaseCommand):
             '--count',
             type=int,
             nargs='?',
-            default=30
+            default=5000
         )
 
     def create_object(self, parent):
@@ -25,22 +25,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         workers_count = options['count']
-        workers_count = 500
         second_level_count = workers_count // 100  # 500
         third_level_count = second_level_count * 5  # 2500 workers from second level
         fourth_level_count = third_level_count * 5  # 12500 workers from third level
         fifth_level_count = workers_count - (second_level_count + third_level_count + fourth_level_count)  # 34500
         parent = Employee.objects.first()
-        for second_level_worker in range(second_level_count):
+        for second_level_worker in range(5):
             # creating second level workers
             parent = self.create_object(parent)
-            for third_level_worker in range(third_level_count):
+            for third_level_worker in range(5):
                 # creating third level workers
                 parent = self.create_object(parent)
-                for fourth_level_worker in range(fourth_level_count):
+                for fourth_level_worker in range(5):
                     # creating fourth level workers
                     parent = self.create_object(parent)
-                    for fifth_level_worker in range(fifth_level_count):
+                    for fifth_level_worker in range(5):
                         # creating fifth level workers
                         self.create_object(parent)
         # Employee.objects.rebuild()
